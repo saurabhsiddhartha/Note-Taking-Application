@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Signup from "../pages/Signup";
 import Login from "../pages/Login";
+import { use } from "react";
+import RecordNote from "./RecordNote";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Track login state
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
+  const [isRecord ,setRecord] = useState(false);
 
   const handleLogin = () => {
     setIsLoginOpen(true);
@@ -19,6 +22,9 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+  };
+  const handleRecordNote = () => {
+    setRecord(true);
   };
 
   return (
@@ -51,7 +57,7 @@ const Sidebar = () => {
         {/* Menu Items */}
         <div className="px-4 text-xl text-white space-y-3">
           <h1 className="cursor-pointer hover:text-gray-300">Home</h1>
-          <h1 className="cursor-pointer hover:text-gray-300">Favourite</h1>
+          <h1 className="cursor-pointer hover:text-gray-300" onClick={handleRecordNote}>Add Notes</h1>
         </div>
 
         {/* Signup/Login/Logout Button */}
@@ -59,7 +65,7 @@ const Sidebar = () => {
           {isAuthenticated ? (
             <div
               onClick={handleLogout}
-              className="bg-black w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
+              className=" w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-100"
             >
               Logout
             </div>
@@ -67,13 +73,13 @@ const Sidebar = () => {
             <div className="flex gap-2">
               <div
                 onClick={handleLogin}
-                className="bg-black w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
+                className="  w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
               >
                 Login
               </div>
               <div
                 onClick={handleSignup}
-                className="bg-black w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
+                className="  w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
               >
                 Signup
               </div>
@@ -83,6 +89,7 @@ const Sidebar = () => {
       </div>
 
       {/* Conditional Render of Modals */}
+      {isRecord && <RecordNote setRecord={setRecord}/>}
       {isSignupOpen && <Signup setIsSignupOpen={setIsSignupOpen} />}
       {isLoginOpen && (
         <Login setIsLoginOpen={setIsLoginOpen} setIsAuthenticated={setIsAuthenticated} />
