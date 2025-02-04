@@ -1,8 +1,25 @@
 import React, { useState } from "react";
-import { Menu, X } from "lucide-react"; // Importing icons
+import { Menu, X } from "lucide-react";
+import Signup from "../pages/Signup";
+import Login from "../pages/Login";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Track login state
+
+  const handleLogin = () => {
+    setIsLoginOpen(true);
+  };
+
+  const handleSignup = () => {
+    setIsSignupOpen(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
 
   return (
     <>
@@ -37,13 +54,39 @@ const Sidebar = () => {
           <h1 className="cursor-pointer hover:text-gray-300">Favourite</h1>
         </div>
 
-        {/* Signup Button (Pinned to Bottom) */}
+        {/* Signup/Login/Logout Button */}
         <div className="mt-auto">
-          <div className="bg-black w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800">
-            Signup
-          </div>
+          {isAuthenticated ? (
+            <div
+              onClick={handleLogout}
+              className="bg-black w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
+            >
+              Logout
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <div
+                onClick={handleLogin}
+                className="bg-black w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
+              >
+                Login
+              </div>
+              <div
+                onClick={handleSignup}
+                className="bg-black w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800"
+              >
+                Signup
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Conditional Render of Modals */}
+      {isSignupOpen && <Signup setIsSignupOpen={setIsSignupOpen} />}
+      {isLoginOpen && (
+        <Login setIsLoginOpen={setIsLoginOpen} setIsAuthenticated={setIsAuthenticated} />
+      )}
     </>
   );
 };
