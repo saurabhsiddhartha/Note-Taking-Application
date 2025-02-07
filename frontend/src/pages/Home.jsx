@@ -8,6 +8,7 @@ import axios from "axios";
 
 const Home = ({ isAuthenticated, setIsAuthenticated }) => {
   const [notes, setNotes] = useState([]); 
+  const [filteredNotes, setFilteredNotes] = useState([]);
 
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("token");
@@ -24,8 +25,12 @@ const Home = ({ isAuthenticated, setIsAuthenticated }) => {
 
   const fetchNotes = async () => {
     const userId = getUserIdFromToken();
-    if (!userId) return;
-
+    if (!userId)
+      {
+        setNotes([])
+        return;
+      }  
+        
     try {
       const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/note/notesdata/${userId}`); 
       setNotes(response.data);
@@ -33,6 +38,7 @@ const Home = ({ isAuthenticated, setIsAuthenticated }) => {
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
+   
   };
 
   useEffect(() => {
@@ -43,10 +49,11 @@ const Home = ({ isAuthenticated, setIsAuthenticated }) => {
     <div>
       <Sidebar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} fetchNotes={fetchNotes}/>
       <div className="flex flex-col p-4">
-        <SearchBar />
+      <SearchBar setNotes={setNotes} setFilteredNotes={setFilteredNotes} />
         <div className="flex md:ml-60">
-          {/* ✅ Pass notes and setNotes as props */}
-          <NoteCard notes={notes} setNotes={setNotes} />  
+          
+          <NoteCard notes={filteredNotes.length > 0 ? filteredNotes : notes} setNotes={setNotes} />
+ 
         </div>
       </div>
     </div>

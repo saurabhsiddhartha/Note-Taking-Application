@@ -5,8 +5,7 @@ import { jwtDecode } from "jwt-decode";
 
 const RecordNote = ({ setRecord,fetchNotes }) => {
   const [note, setNote] = useState({ title: "", text: "", audio: null });
-  const [isRecording, setIsRecording] = useState(false);
-  const [notes, setNotes] = useState([]);  // Initialize notes state
+  const [isRecording, setIsRecording] = useState(false);   
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
@@ -77,8 +76,9 @@ const RecordNote = ({ setRecord,fetchNotes }) => {
 
       alert("Note Saved");
       setRecord(false);
-      setNote({ title: "", text: "", audio: null });   
-      console.log(fetchNotes(),"fetch funtion call") 
+      setNote({ title: "", text: "", audio: null });  
+      fetchNotes() 
+      // console.log(fetchNotes(),"fetch funtion call") 
     } catch (error) {
       console.error("Error adding note:", error);
     }
@@ -87,14 +87,14 @@ const RecordNote = ({ setRecord,fetchNotes }) => {
 
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md z-[9999]">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
         <button className="absolute top-2 right-2 text-gray-600 hover:text-black" onClick={() => setRecord(false)}>
           <X size={20} />
         </button>
-
+  
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">New Note</h2>
-
+  
         <input
           type="text"
           name="title"
@@ -110,7 +110,7 @@ const RecordNote = ({ setRecord,fetchNotes }) => {
           onChange={handleChange}
           className="w-full p-2 border rounded-lg mb-3 h-28"
         />
-
+  
         <div className="flex justify-between mb-3">
           {isRecording ? (
             <button onClick={handleStopRecording} className="px-4 py-2 bg-red-700 text-white rounded-lg">
@@ -122,20 +122,21 @@ const RecordNote = ({ setRecord,fetchNotes }) => {
             </button>
           )}
         </div>
-
+  
         {note.audio && (
           <audio controls className="w-full mt-3">
             <source src={URL.createObjectURL(note.audio)} type="audio/mpeg" />
             Your browser does not support the audio element.
           </audio>
         )}
-
+  
         <button onClick={handleAddNote} className="w-full bg-green-500 text-white py-2 cursor-pointer rounded-lg">
           Add Note
         </button>
       </div>
     </div>
   );
+  
 };
 
 export default RecordNote;

@@ -11,13 +11,13 @@ const App = () => {
   
     if (token) {
       axios
-        .post(`${import.meta.env.VITE_SERVER_URL}/api/user/verify-token`, {}, {  // Use POST request
+        .post(`${import.meta.env.VITE_SERVER_URL}/api/user/verify-token`, {}, {   
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           console.log("Token verification response:", response.data);
           
-          if (response.data.valid) {  // Now this will work
+          if (response.data.valid) {  
             setIsAuthenticated(true);
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           } else {

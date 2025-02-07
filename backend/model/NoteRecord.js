@@ -7,9 +7,6 @@ const NoteSchema = new mongoose.Schema({
   text: {
     type: String,
   },
-  image: {
-    type: String, // Store image URL or file path
-  },
   audio: {
     type: String,  
   },
@@ -19,7 +16,7 @@ const NoteSchema = new mongoose.Schema({
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to the User model
+    ref: "User", 
     required: true,
   },
 });

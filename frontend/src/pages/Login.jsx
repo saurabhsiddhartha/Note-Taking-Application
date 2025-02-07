@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Login = ({ setIsLoginOpen, setIsAuthenticated }) => {
+const Login = ({ setIsLoginOpen, setIsAuthenticated,fetchNotes }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,16 +16,14 @@ const Login = ({ setIsLoginOpen, setIsAuthenticated }) => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/login`, formData);
-
-      // ✅ Store token in localStorage
+ 
       localStorage.setItem("token", response.data.token);
-
-      // ✅ Set default authorization header for future requests
+ 
       axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-
-      // ✅ Update authentication state
+ 
       setIsAuthenticated(true);
       setIsLoginOpen(false);
+      fetchNotes()
     } catch (error) {
       alert(error.response?.data?.message || "Login failed, please try again.");
     }
@@ -42,7 +40,7 @@ const Login = ({ setIsLoginOpen, setIsAuthenticated }) => {
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email Field */}
+           {/* Email Field   */}
           <div>
             <label className="block text-gray-600 mb-1">Email</label>
             <input

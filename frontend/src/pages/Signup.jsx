@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Signup = ({ setIsSignupOpen, setIsAuthenticated }) => {
+const Signup = ({ setIsSignupOpen, setIsAuthenticated, fetchNotes}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +18,7 @@ const Signup = ({ setIsSignupOpen, setIsAuthenticated }) => {
         const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/register`, formData);  
         localStorage.setItem("token", response.data.token); 
         setIsAuthenticated(true);
-        setIsSignupOpen(false);
+        setIsSignupOpen(false); 
       } catch (error) {
         alert(error.response?.data?.message || "Signup failed, please try again.");
       }
