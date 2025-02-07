@@ -4,7 +4,7 @@ import Signup from "../pages/Signup";
 import Login from "../pages/Login";
 import RecordNote from "./RecordNote";
 
-const Sidebar = ({ isAuthenticated, setIsAuthenticated }) => {
+const Sidebar = ({ isAuthenticated, setIsAuthenticated ,fetchNotes }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -25,7 +25,8 @@ const Sidebar = ({ isAuthenticated, setIsAuthenticated }) => {
         <Menu size={24} />
       </button>
 
-      <div className={`fixed top-0 left-0 h-screen bg-red-600 p-4 w-60 flex flex-col transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
+      <div className={`fixed top-0 left-0 h-screen bg-red-600 p-4 w-60 flex flex-col transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 overflow-y-auto`}>
+
         <button className="absolute top-2 right-2 text-white md:hidden" onClick={() => setIsOpen(false)}>
           <X size={24} />
         </button>
@@ -37,7 +38,7 @@ const Sidebar = ({ isAuthenticated, setIsAuthenticated }) => {
           <h1 className="cursor-pointer hover:text-gray-300" onClick={handleRecordNote}>Add Notes</h1>
         </div>
 
-        <div className="mt-auto">
+        <div className="mt-auto flex flex-col gap-2">
           {isAuthenticated ? (
             <button onClick={handleLogout} className="w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-700">
               Logout
@@ -55,7 +56,7 @@ const Sidebar = ({ isAuthenticated, setIsAuthenticated }) => {
         </div>
       </div>
 
-      {isRecord && <RecordNote setRecord={setRecord} />}
+      {isRecord && <RecordNote setRecord={setRecord} fetchNotes={fetchNotes}/>}
       {isSignupOpen && <Signup setIsSignupOpen={setIsSignupOpen} setIsAuthenticated={setIsAuthenticated} />}
       {isLoginOpen && <Login setIsLoginOpen={setIsLoginOpen} setIsAuthenticated={setIsAuthenticated} />}
     </>

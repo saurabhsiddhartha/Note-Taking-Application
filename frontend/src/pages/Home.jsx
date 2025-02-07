@@ -2,16 +2,33 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import SearchBar from "../components/SearchBar";
 import NoteCard from "../components/NoteCard";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const Home = ({ isAuthenticated, setIsAuthenticated }) => {
   const [notes, setNotes] = useState([]); 
+
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+  
+    try {
+      const decoded = jwtDecode(token);
+      return decoded.userId;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return null;
+    }
+  };
+
   const fetchNotes = async () => {
-    const userId = localStorage.getItem("userId");   
+    const userId = getUserIdFromToken();
     if (!userId) return;
+
     try {
       const response = await axios.get(`http://localhost:5000/api/note/notesdata/${userId}`);
       setNotes(response.data);
+      console.log(notes, "All these notes come from the home page");
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
@@ -23,11 +40,12 @@ const Home = ({ isAuthenticated, setIsAuthenticated }) => {
 
   return (
     <div>
-      <Sidebar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+      <Sidebar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} fetchNotes={fetchNotes}/>
       <div className="flex flex-col p-4">
         <SearchBar />
         <div className="flex md:ml-60">
-          <NoteCard fetchNotes={fetchNotes} />  
+          {/* ✅ Pass notes and setNotes as props */}
+          <NoteCard notes={notes} setNotes={setNotes} />  
         </div>
       </div>
     </div>

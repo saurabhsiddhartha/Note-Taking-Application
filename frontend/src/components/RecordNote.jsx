@@ -52,7 +52,7 @@ const RecordNote = ({ setRecord,fetchNotes }) => {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode(token);
-      return decodedToken.userId;  // Ensure correct field for userId
+      return decodedToken.userId;   
     }
     return null;
   };
@@ -77,9 +77,8 @@ const RecordNote = ({ setRecord,fetchNotes }) => {
 
       alert("Note Saved");
       setRecord(false);
-      setNote({ title: "", text: "", audio: null });  // Clear form
-      console.log(fetchNotes(),"fetch funtion call")
-      console.log("Note saved:", response.data);
+      setNote({ title: "", text: "", audio: null });   
+      console.log(fetchNotes(),"fetch funtion call") 
     } catch (error) {
       console.error("Error adding note:", error);
     }
