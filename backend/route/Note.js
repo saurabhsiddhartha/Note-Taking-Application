@@ -1,56 +1,59 @@
 const express = require("express");
 const multer = require("multer");
 const Note = require("../model/NoteRecord");
+// const {authMiddleware} = require('../middleware/middleware')
 
 const router = express.Router();
-const storage = multer.memoryStorage(); // Stores files in memory
-const upload = multer({ storage });
-
-// Create a new note
-router.post("/", upload.single("image"), async (req, res) => {
+const storage = multer.memoryStorage();  
+const upload = multer({ storage }); 
+router.post("/notes/:id", upload.single("audio"), async (req, res) => {
   try {
-    const { title, text, audio } = req.body;
-    let image = null;
+    const { title, text } = req.body;
+    const userId = req.params.id;   
 
+    let audio = null;
     if (req.file) {
-      image = `data:${req.file.mimetype};base64,${req.file.buffer.toString(
-        "base64"
-      )}`;
+      audio = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
     }
-
-    const newNote = new Note({
-      title,
-      text,
-      audio,
-      image,
-    });
+ 
+    const newNote = new Note({ title, text, audio, userId });
 
     const savedNote = await newNote.save();
     res.status(201).json(savedNote);
   } catch (error) {
-    console.error("❌ Error saving note:", error);
+    console.error("Error saving note:", error);
     res.status(500).json({ message: "Server Error" });
   }
 });
 
-router.get("/", async (req, res) => {
+
+// ✅ Get all notes
+router.get("/notesdata/:id", async (req, res) => {
   try {
-    const notes = await Note.find();
+    const userId = req.params.id; // Get userId from request params
+    const notes = await Note.find({ userId }); // Filter by userId
+
     res.status(200).json(notes);
   } catch (error) {
-    console.error(" Error fetching notes:", error);
+    console.error("Error fetching notes:", error);
     res.status(500).json({ message: "Server Error" });
   }
 });
 
-router.delete("/:id", async (req, res) => {
+
+// ✅ Delete a note
+router.delete('/notesdata/:id', async (req, res) => {
   try {
-    await Note.findByIdAndDelete(req.params.id); 
-    res.status(200).json({ message: "Note deleted successfully" });
+      const note = await Note.findByIdAndDelete(req.params.id);
+      if (!note) {
+          return res.status(404).json({ message: "Note not found" });
+      }
+      res.status(200).json({ message: "Note deleted successfully" });
   } catch (error) {
-    console.error("Error deleting note:", error);
-    res.status(500).json({ message: "Server Error" });
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
   }
 });
+
 
 module.exports = router;

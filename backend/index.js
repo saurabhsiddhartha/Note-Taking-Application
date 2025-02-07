@@ -3,13 +3,15 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const connectDB = require("./db/dbconnection"); 
 const Note = require("./route/Note");
-
-const app = express();
+const Auth =require('./route/Auth') 
+const app = express();  
+connectDB(); 
+app.use(express.json()); 
 app.use(cors());
-app.use(bodyParser.json());
-connectDB();
+// app.use(cors({ origin: "http://localhost:3000", methods: ["POST", "GET"], credentials: true }));
+// app.use(bodyParser.json());
 
-// Use noteRoutes
-app.use("/api/notes", Note);
+app.use("/api/note", Note);
+app.use("/api/user", Auth);
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(5000, () => console.log("🚀 Server running on port 5000"));
