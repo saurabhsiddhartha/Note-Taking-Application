@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Login = ({ setIsLoginOpen, setIsAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -10,21 +11,31 @@ const Login = ({ setIsLoginOpen, setIsAuthenticated }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {  
     e.preventDefault();
-    console.log("Login Successful", formData);
-    setIsAuthenticated(true);
-    setIsLoginOpen(false);
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/user/login", formData);
+
+      // ✅ Store token in localStorage
+      localStorage.setItem("token", response.data.token);
+
+      // ✅ Set default authorization header for future requests
+      axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+
+      // ✅ Update authentication state
+      setIsAuthenticated(true);
+      setIsLoginOpen(false);
+    } catch (error) {
+      alert(error.response?.data?.message || "Login failed, please try again.");
+    }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center  bg-opacity-50 backdrop-blur-md">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-md">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full relative">
         {/* Close Button */}
-        <button
-          className="absolute top-2 right-2 text-gray-600 hover:text-black"
-          onClick={() => setIsLoginOpen(false)}
-        >
+        <button className="absolute top-2 right-2 text-gray-600 hover:text-black" onClick={() => setIsLoginOpen(false)}>
           ✖
         </button>
 
@@ -60,10 +71,7 @@ const Login = ({ setIsLoginOpen, setIsAuthenticated }) => {
           </div>
 
           {/* Login Button */}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all"
-          >
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all">
             Login
           </button>
         </form>

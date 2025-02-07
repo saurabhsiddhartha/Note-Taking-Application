@@ -1,28 +1,54 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { X, Trash, Pencil } from "lucide-react";
 
 const NoteCard = () => {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
 
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    try {
+      const decoded = jwtDecode(token); // Decode token
+      return decoded.userId; // Adjust based on your token payload structure
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchNotes = async () => {
+      const userId = getUserIdFromToken();
+      console.log(userId, "this is user id");
+
+      if (!userId) {
+        console.error("No userId found! User may not be logged in.");
+        return;
+      }
+
       try {
-        const response = await axios.get("http://localhost:5000/api/notes");
+        const response = await axios.get(`http://localhost:5000/api/note/notesdata/${userId}`);
+        console.log("Fetched Notes:", response.data);
         setNotes(response.data);
       } catch (error) {
         console.error("Error fetching notes:", error);
       }
     };
+
     fetchNotes();
   }, []);
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/notes/${id}`);
-      setNotes(notes.filter((note) => note._id !== id));
-      alet("Note Deleted")
+      await axios.delete(`http://localhost:5000/api/note/notesdata/${id}`);
+      setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
+
+      alert("Note Deleted");
+      setSelectedNote(null);
     } catch (error) {
       console.error("Error deleting note:", error);
     }
@@ -36,37 +62,41 @@ const NoteCard = () => {
 
   return (
     <div className="flex flex-wrap gap-4">
-      {notes.map((note) => (
-        <div
-          key={note._id}
-          className="w-60 h-auto bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
-          onClick={() => setSelectedNote(note)}
-        >
-          <h1 className="text-lg font-semibold text-gray-800">{note.title}</h1>
-          <p className="text-gray-600 text-sm mt-2 line-clamp-2">{note.text}</p>
+      {notes.length === 0 ? (
+        <p className="w-full text-center text-gray-500">No notes available.</p>
+      ) : (
+        notes.map((note) => (
+          <div
+            key={note._id}
+            className="w-60 h-auto bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+            onClick={() => setSelectedNote(note)}
+          >
+            <h1 className="text-lg font-semibold text-gray-800">{note.title}</h1>
+            <p className="text-gray-600 text-sm mt-2 line-clamp-2">{note.text}</p>
 
-          <p className="text-gray-500 text-xs mt-2">
-            {new Date(note.createdAt).toLocaleString()}
-          </p>
+            <p className="text-gray-500 text-xs mt-2">
+              {new Date(note.createdAt).toLocaleString()}
+            </p>
 
-          {/* Display Image */}
-          {note.image && (
-            <img
-              src={note.image}
-              alt="Note"
-              className="w-full h-20 object-cover mt-2 rounded-lg"
-            />
-          )}
+            {/* Display Image */}
+            {note.image && (
+              <img
+                src={note.image}
+                alt="Note"
+                className="w-full h-20 object-cover mt-2 rounded-lg"
+              />
+            )}
 
-          {/* Display Audio Player (Compact) */}
-          {note.audio && (
-            <audio controls className="w-full mt-2">
-              <source src={note.audio} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          )}
-        </div>
-      ))}
+            {/* Display Audio Player (Compact) */}
+            {note.audio && (
+              <audio controls className="w-full mt-2">
+                <source src={note.audio} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            )}
+          </div>
+        ))
+      )}
 
       {selectedNote && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-black/40">
