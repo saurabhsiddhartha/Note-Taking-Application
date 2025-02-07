@@ -26,7 +26,6 @@ const Sidebar = ({ isAuthenticated, setIsAuthenticated ,fetchNotes }) => {
       </button>
 
       <div className={`fixed top-0 left-0 h-screen bg-red-600 p-4 w-60 flex flex-col transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 overflow-y-auto`}>
-
         <button className="absolute top-2 right-2 text-white md:hidden" onClick={() => setIsOpen(false)}>
           <X size={24} />
         </button>
@@ -44,7 +43,7 @@ const Sidebar = ({ isAuthenticated, setIsAuthenticated ,fetchNotes }) => {
               Logout
             </button>
           ) : (
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2">
               <button onClick={handleLogin} className="w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800">
                 Login
               </button>
