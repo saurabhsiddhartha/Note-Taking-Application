@@ -8,7 +8,17 @@ const app = express();
 connectDB(); 
 app.use(express.json()); 
 app.use(cors());
-app.use(cors({ origin: "https://note-taking-application-9alys.vercel.app/", methods: ["POST", "GET"], credentials: true }));
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "https://note-taking-application-iota.vercel.app",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true, // Allow cookies if needed
+    allowedHeaders: "Content-Type, Authorization",
+  })
+);
+
 app.use(bodyParser.json());
 app.get('/',(req,res)=>{
     res.send("Hello from backend")
