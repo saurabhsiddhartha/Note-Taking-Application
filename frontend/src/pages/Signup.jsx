@@ -15,7 +15,7 @@ const Signup = ({ setIsSignupOpen, setIsAuthenticated }) => {
       e.preventDefault();
       
       try {
-        const response = await axios.post("http://localhost:5000/api/user/register", formData);  
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/register`, formData);  
         localStorage.setItem("token", response.data.token); 
         setIsAuthenticated(true);
         setIsSignupOpen(false);

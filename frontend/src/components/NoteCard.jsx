@@ -7,7 +7,7 @@ const NoteCard = ({ notes, setNotes }) => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/note/notesdata/${id}`);
+      await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/note/notesdata/${id}`);
       setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
 
       alert("Note Deleted");

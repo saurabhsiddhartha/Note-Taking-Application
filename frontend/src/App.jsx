@@ -11,7 +11,7 @@ const App = () => {
   
     if (token) {
       axios
-        .post("http://localhost:5000/api/user/verify-token", {}, {  // Use POST request
+        .post(`${import.meta.env.VITE_SERVER_URL}/api/user/verify-token`, {}, {  // Use POST request
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {

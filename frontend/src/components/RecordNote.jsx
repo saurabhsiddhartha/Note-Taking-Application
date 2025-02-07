@@ -71,7 +71,7 @@ const RecordNote = ({ setRecord,fetchNotes }) => {
     formData.append("userId", userId);
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/note/notes/${userId}`, formData, {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/note/notes/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

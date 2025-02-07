@@ -5,6 +5,7 @@ import NoteCard from "../components/NoteCard";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
+
 const Home = ({ isAuthenticated, setIsAuthenticated }) => {
   const [notes, setNotes] = useState([]); 
 
@@ -26,7 +27,7 @@ const Home = ({ isAuthenticated, setIsAuthenticated }) => {
     if (!userId) return;
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/note/notesdata/${userId}`);
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/note/notesdata/${userId}`); 
       setNotes(response.data);
       console.log(notes, "All these notes come from the home page");
     } catch (error) {

@@ -10,7 +10,9 @@ app.use(express.json());
 app.use(cors());
 // app.use(cors({ origin: "http://localhost:3000", methods: ["POST", "GET"], credentials: true }));
 // app.use(bodyParser.json());
-
+app.get('/',(req,res)=>{
+    res.send("Hello from backend")
+})
 app.use("/api/note", Note);
 app.use("/api/user", Auth);
 
