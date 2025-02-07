@@ -8,8 +8,7 @@ const Auth =require('./route/Auth')
 const app = express();  
 connectDB(); 
 app.use(express.json()); 
-app.use(cors());
-const cors = require("cors");
+app.use(cors()); 
 
 app.use(
   cors({
