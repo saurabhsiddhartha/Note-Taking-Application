@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const connectDB = require("./db/dbconnection"); 
 const Note = require("./route/Note");
+require("dotenv").config();
 const Auth =require('./route/Auth') 
 const app = express();  
 connectDB(); 
@@ -12,7 +13,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: "https://note-taking-application-iota.vercel.app",
+    origin: process.env.FRONTEND_URL,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // Allow cookies if needed
     allowedHeaders: "Content-Type, Authorization",
