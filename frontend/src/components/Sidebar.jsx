@@ -37,13 +37,13 @@ const Sidebar = ({ isAuthenticated, setIsAuthenticated ,fetchNotes }) => {
           <h1 className="cursor-pointer hover:text-gray-300" onClick={handleRecordNote}>Add Notes</h1>
         </div>
 
-        <div className="mt-auto flex flex-col gap-2">
+        <div className="mt-auto flex flex-col gap-2 pb-4">
           {isAuthenticated ? (
             <button onClick={handleLogout} className="w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-700">
               Logout
             </button>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full">
               <button onClick={handleLogin} className="w-full p-3 text-xl text-white text-center rounded-lg shadow-xl cursor-pointer hover:bg-gray-800">
                 Login
               </button>

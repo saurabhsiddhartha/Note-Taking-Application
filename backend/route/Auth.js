@@ -50,8 +50,7 @@ router.post("/register", async (req, res) => {
     const newUser = new User({ name, email, password: hashedPassword });
 
     await newUser.save();
-
-    // Generate a token
+ 
     const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: "1h" });
 
     res.status(201).json({ message: "User registered successfully.", token });
@@ -61,7 +60,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// **User Login Route**
+ 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -71,8 +70,7 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Email and password are required." });
     }
-
-    // Find user by email
+ 
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password." });
