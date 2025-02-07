@@ -5,6 +5,9 @@ const connectDB = require("./db/dbconnection");
 const Note = require("./route/Note");
 const Auth = require("./route/Auth");
 require("dotenv").config();
+ 
+app.use(express.json()); 
+app.use(bodyParser.json()); 
 
 const app = express();  
 connectDB(); 
@@ -26,9 +29,7 @@ app.use((req, res, next) => {
   }
   next();
 });
- 
-app.use(express.json()); 
-app.use(bodyParser.json()); 
+
 app.get("/", (req, res) => {
   res.send("Hello from the backend");
 });
