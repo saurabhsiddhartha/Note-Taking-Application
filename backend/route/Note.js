@@ -63,15 +63,12 @@ router.delete("/notesdata/:id", async (req, res) => {
 router.put("/notesdata/:id", upload.single("audio"), async (req, res) => {
   try {
     const { title, text } = req.body;
-    const noteId = req.params.id;
-
-    // Find the note by ID
+    const noteId = req.params.id; 
     let note = await Note.findById(noteId);
     if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
-
-    // Update the note's fields
+ 
     note.title = title || note.title;
     note.text = text || note.text;
 

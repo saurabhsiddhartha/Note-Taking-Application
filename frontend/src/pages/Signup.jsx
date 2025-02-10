@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Signup = ({ setIsSignupOpen, setIsAuthenticated, fetchNotes}) => {
+const Signup = ({ setIsSignupOpen, setIsAuthenticated, fetchNotes }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,22 +11,31 @@ const Signup = ({ setIsSignupOpen, setIsAuthenticated, fetchNotes}) => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-    const handleSubmit = async (e) => {  
-      e.preventDefault();
-      
-      try {
-        const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/register`, formData);  
-        localStorage.setItem("token", response.data.token); 
-        setIsAuthenticated(true);
-        setIsSignupOpen(false); 
-      } catch (error) {
-        alert(error.response?.data?.message || "Signup failed, please try again.");
-      }
-    };
-    
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/user/register`,
+        formData
+      );
+
+      localStorage.setItem("token", response.data.token);
+      setIsAuthenticated(true);
+      setIsSignupOpen(false);
+      fetchNotes();
+    } catch (error) {
+      alert(
+        error.response?.data?.message || "Signup failed, please try again."
+      );
+    }
+  };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md">
+    <div
+      className="fixed inset-0 flex items-center justify-center backdrop-blur-md z-50"
+    >
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full relative">
         <button
           className="absolute top-2 right-2 text-gray-600 hover:text-black"
@@ -35,7 +44,9 @@ const Signup = ({ setIsSignupOpen, setIsAuthenticated, fetchNotes}) => {
           ✖
         </button>
 
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Sign Up</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          Sign Up
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
